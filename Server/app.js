@@ -20,5 +20,5 @@ app.use(bodyParser.json());
 app.use(router);
 app.listen(config.port);
 
-console.log("Server ON :\n\n");
+console.log("Server ON :\n");
 

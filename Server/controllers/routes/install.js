@@ -4,7 +4,7 @@
 
 var mysql = require('mysql');
 var db_config = require("../../config/db.js");
-var connection = mysql.createConnection(db_config);
+var connection = mysql.createConnection(db_config.db);
 
 module.exports = {
     POST: function (req, res)
