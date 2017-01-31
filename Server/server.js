@@ -19,12 +19,15 @@ app.use(bodyParser.json())
 .post('/install', function (req, res) {
     if (req.body.packets) {
         console.log("POST /");
-        res.end(JSON.stringify(req.body));
+        var obj = [];
         for (var key in req.body.packets) {
             console.log(req.body.packets[key].name);
             console.log(req.body.packets[key].version);
             console.log(req.body.packets[key].current_version);
+            req.body.packets[key].url = req.body.packets[key].name + '_' + req.body.packets[key].version + '.tar.gz';
+            obj[key] = req.body.packets[key];
         }
+        res.end(JSON.stringify(obj));
         //console.log(typeof(req.body.packets[0].name));
         //select name, version from packets_versions join packets on packets.id = packets_versions.packet_id where name = "nodejs" and packets_versions.version = "6.8";.
     }
