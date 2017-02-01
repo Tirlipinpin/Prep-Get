@@ -1,7 +1,8 @@
-var express = require('express');
-var bodyParser = require('body-parser');
-var compareVersions = require('compare-versions');
-var mysql      = require('mysql');
+var express             = require('express');
+var bodyParser          = require('body-parser');
+var compareVersions     = require('compare-versions');
+var mysql               = require('mysql');
+var fs                  = require('fs');
 
 var connection = mysql.createConnection({ 
   host     : 'localhost',
@@ -24,7 +25,7 @@ app.use(bodyParser.json())
             console.log(req.body.packets[key].name);
             console.log(req.body.packets[key].version);
             console.log(req.body.packets[key].current_version);
-            req.body.packets[key].url = req.body.packets[key].name + '_' + req.body.packets[key].version + '.tar.gz';
+            req.body.packets[key].url = '/datas/packets/' + req.body.packets[key].name + '/' + req.body.packets[key].name + '_' + req.body.packets[key].version + '.tar.gz';
             obj[key] = req.body.packets[key];
         }
         res.end(JSON.stringify(obj));
@@ -70,9 +71,24 @@ app.use(bodyParser.json())
     })
 })
 
+.get('/datas/packets/:package/:file', function (req, res) {
+    SendFile(req.originalUrl, res);
+})
+
 .use(function (req, res) {
     res.sendStatus(403);
 })
 
 .listen(port);
 console.log('Listening at http://localhost:' + port)
+
+function SendFile(filePath, res) {
+    if (fs.existsSync(__dirname + filePath)) {
+        console.log('[LOG] Successfully downloaded package : ' + filePath);
+        res.sendFile(filePath, {root: __dirname });
+    }
+    else {
+        console.log('[ERROR] Error, package not found : ' + filePath);
+        res.sendStatus(404);
+    }
+}
