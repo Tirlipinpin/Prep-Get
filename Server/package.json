@@ -2,10 +2,9 @@
   "name": "prep_get",
   "version": "0.0.1",
   "description": "Aptitude like",
-  "main": "server.js",
+  "main": "app.js",
   "dependencies": {
     "body-parser": "^1.16.0",
-    "compare-versions": "^3.0.0",
     "express": "^4.14.1",
     "node-mysql": "^0.4.2"
   },
