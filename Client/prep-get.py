@@ -10,7 +10,7 @@ ROOT = "http://172.16.1.99:4242"
 
 def install():
     URL = ROOT + "/install"
-    count = 0
+    count = 1
     data = {"packages" :[]}
     while count < len(value):
         data["packages"].append({"name": value[count]})
@@ -30,9 +30,11 @@ def install():
     
 def search():
     URL = ROOT + "/search"
-    print("Checking database for :", value[0])
-    data = {"search": value[0]}
-    params = json.dumps(data).encode('utf8')
+    count = 1
+    while count < len(value):
+        print("Checking database for :", value[count])
+        count += 1
+    params = json.dumps(value).encode('utf8')
     req = request.Request(URL, data=params, headers={'content-type': 'application/json'})
     response = request.urlopen(req).read().decode("utf8")
     files = json.loads(response)
@@ -41,7 +43,7 @@ def search():
 
 parser = argparse.ArgumentParser()
 parser.add_argument('install', nargs='+', help='install a package')
-parser.add_argument('search', nargs='+', help='check if package exists')
+# parser.add_argument('search', nargs='+', help='check if package exists')
 args = parser.parse_args()
 
 if sys.argv[1] == 'install' and sys.argv[2: ]:
