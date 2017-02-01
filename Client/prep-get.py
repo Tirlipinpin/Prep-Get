@@ -3,6 +3,7 @@ import json
 import argparse
 import sys
 import os
+import shutil
 from urllib import request
 ROOT = "http://172.16.1.99:4242"
 URL = ROOT + "/install"
@@ -40,4 +41,4 @@ def main():
     
 main()
 if os.path.exists("tmp_pack") :
-    os.rmdir("tmp_pack")
+    shutil.rmtree("tmp_pack", ignore_errors=True)
