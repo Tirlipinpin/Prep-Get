@@ -81,7 +81,6 @@ app.use(bodyParser.json())
 
 .listen(port);
 console.log('Listening at http://localhost:' + port)
-<<<<<<< HEAD
 
 function SendFile(filePath, res) {
     if (fs.existsSync(__dirname + filePath)) {
@@ -93,5 +92,3 @@ function SendFile(filePath, res) {
         res.sendStatus(404);
     }
 }
-=======
->>>>>>> soulie_s
