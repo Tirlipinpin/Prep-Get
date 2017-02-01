@@ -46,18 +46,33 @@ app.use(bodyParser.json())
 })
 
 .post('/search', function (req, res) {
-    if (req.body.search) {
+    if (req.body[0]) {
         console.log("POST /");
-        connection.query('SELECT name FROM packages WHERE name LIKE \'%' + req.body.search + '%\'', function(err, rows, fields) {
-            if (!err && rows[0] != undefined) {
-                console.log('The solution is: ', rows);
-                res.end(JSON.stringify(rows));
+        var qry_string = 'SELECT name FROM packages';
+        for (var key in req.body) {
+            key = parseInt(key);
+            if (key == 0) {
+                qry_string += ' WHERE name LIKE \'%' + req.body[key] + '%\'';
+            } else {
+                qry_string += ' OR name LIKE \'%' + req.body[key] + '%\'';
             }
-            else {
-                console.log('Error while performing Query.');
-                res.sendStatus(404);
+            if (req.body[key + 1] === undefined) {
+                qry(qry_string);
             }
-        })
+        }
+        function qry(str) {
+            console.log(str);
+            connection.query(str, function(err, rows, fields) {
+                if (!err && rows[0] != undefined) {
+                    console.log('[LOG] Search successfully append');
+                    res.end(JSON.stringify(rows));
+                }
+                else {
+                    console.log('[ERROR] Search not found');
+                    res.sendStatus(404);
+                }
+            })
+        };
     }
     else {
         res.sendStatus(403);
