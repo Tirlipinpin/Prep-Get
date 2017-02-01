@@ -1,7 +1,8 @@
-var express = require('express');
-var bodyParser = require('body-parser');
-var compareVersions = require('compare-versions');
-var mysql      = require('mysql');
+var express             = require('express');
+var bodyParser          = require('body-parser');
+var compareVersions     = require('compare-versions');
+var mysql               = require('mysql');
+var fs                  = require('fs');
 
 var connection = mysql.createConnection({ 
   host     : 'localhost',
@@ -17,27 +18,35 @@ const port = 4242;
 app.use(bodyParser.json())
 
 .post('/install', function (req, res) {
-    if (req.body.packets) {
+    if (req.body.packages) {
         console.log("POST /");
-        var obj = [];
-        for (var key in req.body.packets) {
-            console.log(req.body.packets[key].name);
-            console.log(req.body.packets[key].version);
-            console.log(req.body.packets[key].current_version);
-            req.body.packets[key].url = req.body.packets[key].name + '_' + req.body.packets[key].version + '.tar.gz';
-            obj[key] = req.body.packets[key];
-        }
-        res.end(JSON.stringify(obj));
-        //console.log(typeof(req.body.packets[0].name));
-        //select name, version from packets_versions join packets on packets.id = packets_versions.packet_id where name = "nodejs" and packets_versions.version = "6.8";.
+        
+        rec(req.body.packages, 0);
+        function rec(packages, key) {
+            console.log(key);
+            if (packages[key] === undefined) {
+                res.end(JSON.stringify(packages));
+            } else {
+                CheckVersion(packages[key].name, packages[key].version, function(is_exists) {
+                    if (is_exists) {
+                        packages[key].url = '/packages/' + packages[key].name + '/' + packages[key].name + '_' + packages[key].version + '.tar.gz';
+                    }
+                    rec(packages, key+1);
+                });
+            }
+        };
     }
     else {
         res.sendStatus(403);
     }
 })
 
+.get('/packages/:package/:file', function (req, res) {
+    SendFile(req.originalUrl, res);
+})
+
 .post('/search', function (req, res) {
-    if (req.body.packets) {
+    if (req.body.packages) {
         console.log("POST /");
         res.end(JSON.stringify(req.body));
     }
@@ -47,7 +56,7 @@ app.use(bodyParser.json())
 })
 
 .post('/upload', function (req, res) {
-    if (req.body.packets) {
+    if (req.body.packages) {
         console.log("POST /");
         res.end(JSON.stringify(req.body));
     }
@@ -58,7 +67,7 @@ app.use(bodyParser.json())
 
 .post('/list', function (req, res) {
     console.log("POST /");
-    connection.query('SELECT name from packets', function(err, rows, fields) {
+    connection.query('SELECT name from packages', function(err, rows, fields) {
     if (!err) {
         console.log('The solution is: ', rows);
         res.end(JSON.stringify(rows));
@@ -76,3 +85,42 @@ app.use(bodyParser.json())
 
 .listen(port);
 console.log('Listening at http://localhost:' + port)
+
+function CheckVersion(name, version, callback) {
+    if (version === undefined) {
+        connection.query('SELECT version FROM packages_versions JOIN packages ON packages.id = packages_versions.package_id WHERE packages.name = \'' + name + '\' ORDER BY version DESC LIMIT 1;', function(err, rows, fields) {
+            if (!err && rows[0] != undefined) {
+                version = rows[0].version;
+                qry(name, rows[0].version);
+            } else {
+                console.log('[ERROR] Package not found : ' + name);
+                callback(false);
+            }
+        });
+    } else {
+        qry(name, version); 
+    }
+    function qry(name, version) {
+        connection.query('SELECT name, version FROM packages_versions JOIN packages ON packages.id = packages_versions.package_id WHERE name = \'' + name + '\' AND packages_versions.version = \'' + version + '\'', function(err, rows, fields) {
+            if (!err && rows[0] != undefined) {
+                console.log('[LOG] Successfully found package : ' + rows[0].name + ' version : ' + rows[0].version);
+                return (callback(true));
+            }
+            else {
+                console.log('[ERROR] Package name or version not found : ' + name + ' version : ' + version);
+                return (callback(false));
+            }
+        })
+    };
+}
+
+function SendFile(filePath, res) {
+    if (fs.existsSync(__dirname + filePath)) {
+        console.log('[LOG] Successfully downloaded package : ' + filePath);
+        res.sendFile(filePath, {root: __dirname });
+    }
+    else {
+        console.log('[ERROR] Package file not found : ' + filePath);
+        res.sendStatus(404);
+    }
+}
