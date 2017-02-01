@@ -15,28 +15,29 @@ def install():
     while count < len(value):
         data["packages"].append({"name": value[count]})
         count += 1
-
     params = json.dumps(data).encode('utf8')
     req = request.Request(URL, data=params, headers={'content-type': 'application/json'})
     response = request.urlopen(req).read().decode("utf8")
     files = json.loads(response)
     if not os.path.exists("tmp_pack") :
         os.makedirs("tmp_pack")
-    print(files)
     for file in files :
+        print("Downloading " + file["name"])
         request.urlretrieve(ROOT + file["url"], "tmp_pack/" + file["name"] + ".tar.gz")
     if os.listdir("tmp_pack") == [] :
         print("Error while downloading packages")
     else :
         print("Packages successfully downloaded")
-    # if os.path.exists("tmp_pack") :
-    #     shutil.rmtree("tmp_pack", ignore_errors=True)
+    if os.path.exists("tmp_pack") :
+        shutil.rmtree("tmp_pack", ignore_errors=True)
     
 def search():
     URL = ROOT + "/search"
-    print("Checking database for :", value[0])
-    data = {"search": value[0]}
-    params = json.dumps(data).encode('utf8')
+    count = 1
+    while count < len(value):
+        print("Checking database for :", value[count])
+        count += 1
+    params = json.dumps(value).encode('utf8')
     req = request.Request(URL, data=params, headers={'content-type': 'application/json'})
     response = request.urlopen(req).read().decode("utf8")
     files = json.loads(response)
@@ -51,12 +52,12 @@ args = parser.parse_args()
 if sys.argv[1] == 'install' and sys.argv[2: ]:
     for _, value in parser.parse_args()._get_kwargs():
         pass
-        # print("Checking database for :", value)
     install()
 elif sys.argv[1] == 'search' and sys.argv[2: ]:
     for _, value in parser.parse_args()._get_kwargs():
         pass
-        # print("Searching package :", value)
     search()
-else:
-    print("No package(s) selected")
+elif sys.argv[1] != 'install' and sys.argv[1] != 'search':
+    print("Bad entry, please consult the help")
+else :
+    print("No package(s) selected");
