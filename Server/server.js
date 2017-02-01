@@ -27,9 +27,9 @@ app.use(bodyParser.json())
             if (packages[key] === undefined) {
                 res.end(JSON.stringify(packages));
             } else {
-                CheckVersion(packages[key].name, packages[key].version, function(is_exists) {
+                CheckVersion(packages[key].name, packages[key].version, function(is_exists, version = '') {
                     if (is_exists) {
-                        packages[key].url = '/packages/' + packages[key].name + '/' + packages[key].name + '_' + packages[key].version + '.tar.gz';
+                        packages[key].url = '/packages/' + packages[key].name + '/' + packages[key].name + '_' + version + '.orig.tar.xz';
                     }
                     rec(packages, key+1);
                 });
@@ -46,9 +46,18 @@ app.use(bodyParser.json())
 })
 
 .post('/search', function (req, res) {
-    if (req.body.packages) {
+    if (req.body.search) {
         console.log("POST /");
-        res.end(JSON.stringify(req.body));
+        connection.query('SELECT name FROM packages WHERE name LIKE \'%' + req.body.search + '%\'', function(err, rows, fields) {
+            if (!err && rows[0] != undefined) {
+                console.log('The solution is: ', rows);
+                res.end(JSON.stringify(rows));
+            }
+            else {
+                console.log('Error while performing Query.');
+                res.sendStatus(404);
+            }
+        })
     }
     else {
         res.sendStatus(403);
@@ -90,7 +99,6 @@ function CheckVersion(name, version, callback) {
     if (version === undefined) {
         connection.query('SELECT version FROM packages_versions JOIN packages ON packages.id = packages_versions.package_id WHERE packages.name = \'' + name + '\' ORDER BY version DESC LIMIT 1;', function(err, rows, fields) {
             if (!err && rows[0] != undefined) {
-                version = rows[0].version;
                 qry(name, rows[0].version);
             } else {
                 console.log('[ERROR] Package not found : ' + name);
@@ -104,7 +112,7 @@ function CheckVersion(name, version, callback) {
         connection.query('SELECT name, version FROM packages_versions JOIN packages ON packages.id = packages_versions.package_id WHERE name = \'' + name + '\' AND packages_versions.version = \'' + version + '\'', function(err, rows, fields) {
             if (!err && rows[0] != undefined) {
                 console.log('[LOG] Successfully found package : ' + rows[0].name + ' version : ' + rows[0].version);
-                return (callback(true));
+                return (callback(true, rows[0].version));
             }
             else {
                 console.log('[ERROR] Package name or version not found : ' + name + ' version : ' + version);
