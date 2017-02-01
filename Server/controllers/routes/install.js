@@ -12,7 +12,6 @@ module.exports = {
             if (req.body.packages)
             {
                 rec(req.body.packages, 0);
-
                 function rec(packages, key)
                 {
                     if (packages[key] === undefined)
