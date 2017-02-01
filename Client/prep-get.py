@@ -6,7 +6,7 @@ import os
 import shutil
 from urllib import request
 
-ROOT = "http://172.16.1.99:4242"
+ROOT = "http://172.16.1.248:4242"
 
 def install():
     URL = ROOT + "/install"
@@ -28,8 +28,6 @@ def install():
         print("Error while downloading packages")
     else :
         print("Packages successfully downloaded")
-    # if os.path.exists("tmp_pack") :
-    #     shutil.rmtree("tmp_pack", ignore_errors=True)
     
 def search():
     URL = ROOT + "/search"
@@ -45,9 +43,12 @@ def search():
         print("Package found : ", obj['name'])
 
 parser = argparse.ArgumentParser()
-parser.add_argument('install', nargs='+', help='install a package')
+subparser = parser.add_subparsers()
+install = subparser.add_parser('install', help='install a package')
+install.add_argument('-v')
+search = subparser.add_parser('search', help='check if package exists')
 # parser.add_argument('search', nargs='+', help='check if package exists')
-args = parser.parse_args()
+# args = parser.parse_args()
 
 if sys.argv[1] == 'install' and sys.argv[2: ]:
     for _, value in parser.parse_args()._get_kwargs():
