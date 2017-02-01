@@ -5,6 +5,7 @@ import sys
 import os
 import shutil
 from urllib import request
+
 ROOT = "http://172.16.1.99:4242"
 URL = ROOT + "/install"
 
@@ -33,12 +34,12 @@ def main():
         os.makedirs("tmp_pack")
     print(files)
     for file in files :
-        request.urlretrieve(ROOT + file.url, "tmp_pack/" + file.name + ".tar.gz")
+        request.urlretrieve(ROOT + file["url"], "tmp_pack/" + file["name"] + ".tar.gz")
     if os.listdir("tmp_pack") == [] :
         print("Error while downloading packages")
     else :
         print("Packages successfully downloaded")
     
 main()
-if os.path.exists("tmp_pack") :
-    shutil.rmtree("tmp_pack", ignore_errors=True)
+# if os.path.exists("tmp_pack") :
+#     shutil.rmtree("tmp_pack", ignore_errors=True)
