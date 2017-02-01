@@ -1,6 +1,5 @@
 var express             = require('express');
 var bodyParser          = require('body-parser');
-var compareVersions     = require('compare-versions');
 var mysql               = require('mysql');
 var fs                  = require('fs');
 
