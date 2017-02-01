@@ -3,6 +3,7 @@ import json
 import argparse
 import sys
 import os
+import shutil
 from urllib import request
 ROOT = "http://172.16.1.99:4242"
 URL = ROOT + "/install"
@@ -13,7 +14,7 @@ args = parser.parse_args()
 
 if sys.argv[1] == 'install' and sys.argv[2: ]:
     for _, value in parser.parse_args()._get_kwargs():
-        print("Packages sended")
+        print("Packages sent")
 else :
     print("No package(s) selected")
 
@@ -28,15 +29,16 @@ def main():
     req = request.Request(URL, data=params, headers={'content-type': 'application/json'})
     response = request.urlopen(req).read().decode("utf8")
     files = json.loads(response)
-    if not os.path.exists("tmp") :
-        os.makedirs("tmp")
+    if not os.path.exists("tmp_pack") :
+        os.makedirs("tmp_pack")
     print(files)
     for file in files :
-        request.urlretrieve(ROOT + file.url, "tmp/" + file.name + ".tar.gz")
-    if os.listdir("tmp") == [] :
+        request.urlretrieve(ROOT + file.url, "tmp_pack/" + file.name + ".tar.gz")
+    if os.listdir("tmp_pack") == [] :
         print("Error while downloading packages")
     else :
         print("Packages successfully downloaded")
-    os.rmdir("tmp")
     
 main()
+if os.path.exists("tmp_pack") :
+    shutil.rmtree("tmp_pack", ignore_errors=True)
