@@ -28,7 +28,7 @@ app.use(bodyParser.json())
             } else {
                 CheckVersion(packages[key].name, packages[key].version, function(is_exists, version = '') {
                     if (is_exists) {
-                        packages[key].url = '/packages/' + packages[key].name + '/' + packages[key].name + '_' + version + '.orig.tar.xz';
+                        packages[key].url = '/packages/' + packages[key].name + '/' + packages[key].name + '_' + version + '.orig.tar.gz';
                     }
                     rec(packages, key+1);
                 });
@@ -86,20 +86,6 @@ app.use(bodyParser.json())
     else {
         res.sendStatus(403);
     }
-})
-
-.post('/list', function (req, res) {
-    console.log("POST /");
-    connection.query('SELECT name from packages', function(err, rows, fields) {
-    if (!err) {
-        console.log('The solution is: ', rows);
-        res.end(JSON.stringify(rows));
-    }
-    else {
-        console.log('Error while performing Query.');
-        res.sendStatus(404);
-    }
-    })
 })
 
 .use(function (req, res) {
