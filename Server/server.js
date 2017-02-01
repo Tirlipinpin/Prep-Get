@@ -20,21 +20,21 @@ app.use(bodyParser.json())
 .post('/install', function (req, res) {
     if (req.body.packages) {
         console.log("POST /");
-        var obj = [];
-        //console.log(JSON.stringify(req.body));
-        for (var key in req.body.packages) {
-            //console.log(req.body.packages[key].name);
-            //console.log(req.body.packages[key].version);
-            //console.log(req.body.packages[key].current_version);
-            CheckVersion(req.body.packages[key].name, req.body.packages[key].version, function(is_exists) {
-                if (is_exists === true) {
-                    req.body.packages[key].url = '/packages/' + req.body.packages[key].name + '/' + req.body.packages[key].name + '_' + req.body.packages[key].version + '.tar.gz';
-                    obj[key] = req.body.packages[key];
-                }
-            })
-        }
-        console.log(req.body.packages);
-        res.end(JSON.stringify(obj));
+        
+        rec(req.body.packages, 0);
+        function rec(packages, key) {
+            console.log(key);
+            if (packages[key] === undefined) {
+                res.end(JSON.stringify(packages));
+            } else {
+                CheckVersion(packages[key].name, packages[key].version, function(is_exists) {
+                    if (is_exists) {
+                        packages[key].url = '/packages/' + packages[key].name + '/' + packages[key].name + '_' + packages[key].version + '.tar.gz';
+                    }
+                    rec(packages, key+1);
+                });
+            }
+        };
     }
     else {
         res.sendStatus(403);
@@ -86,20 +86,22 @@ app.use(bodyParser.json())
 .listen(port);
 console.log('Listening at http://localhost:' + port)
 
-function CheckVersion(name, version = "0", callback) {
-    if (version === undefined || version === "0") {
-        connection.query('select name from packages WHERE name = \'' + name + '\'', function(err, rows, fields) {
+function CheckVersion(name, version, callback) {
+    if (version === undefined) {
+        connection.query('SELECT version FROM packages_versions JOIN packages ON packages.id = packages_versions.package_id WHERE packages.name = \'' + name + '\' ORDER BY version DESC LIMIT 1;', function(err, rows, fields) {
             if (!err && rows[0] != undefined) {
-                console.log('[LOG] Successfully found package : ' + name);
-                return (callback(true));
+                version = rows[0].version;
+                qry(name, rows[0].version);
+            } else {
+                console.log('[ERROR] Package not found : ' + name);
+                callback(false);
             }
-            else {
-                console.log('[ERROR] Package name not found : ' + name);
-                return (callback(false));
-            }
-        })
+        });
     } else {
-        connection.query('select name, version from packages_versions join packages on packages.id = packages_versions.package_id where name = \'' + name + '\' and packages_versions.version = \'' + version + '\'', function(err, rows, fields) {
+        qry(name, version); 
+    }
+    function qry(name, version) {
+        connection.query('SELECT name, version FROM packages_versions JOIN packages ON packages.id = packages_versions.package_id WHERE name = \'' + name + '\' AND packages_versions.version = \'' + version + '\'', function(err, rows, fields) {
             if (!err && rows[0] != undefined) {
                 console.log('[LOG] Successfully found package : ' + rows[0].name + ' version : ' + rows[0].version);
                 return (callback(true));
@@ -109,7 +111,7 @@ function CheckVersion(name, version = "0", callback) {
                 return (callback(false));
             }
         })
-    }
+    };
 }
 
 function SendFile(filePath, res) {
