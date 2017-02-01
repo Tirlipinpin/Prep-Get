@@ -22,11 +22,14 @@ def install():
     if not os.path.exists("tmp_pack") :
         os.makedirs("tmp_pack")
     for file in files :
+        print("Downloading " + file["name"])
         request.urlretrieve(ROOT + file["url"], "tmp_pack/" + file["name"] + ".tar.gz")
     if os.listdir("tmp_pack") == [] :
         print("Error while downloading packages")
     else :
         print("Packages successfully downloaded")
+    # if os.path.exists("tmp_pack") :
+    #     shutil.rmtree("tmp_pack", ignore_errors=True)
     
 def search():
     URL = ROOT + "/search"
@@ -54,5 +57,7 @@ elif sys.argv[1] == 'search' and sys.argv[2: ]:
     for _, value in parser.parse_args()._get_kwargs():
         pass
     search()
-else:
-    print("No package(s) selected")
+elif sys.argv[1] != 'install' and sys.argv[1] != 'search':
+    print("Bad entry, please consult the help")
+else :
+    print("No package(s) selected");
