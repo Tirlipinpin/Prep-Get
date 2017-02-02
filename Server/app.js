@@ -7,7 +7,7 @@ var app = express();
 var router = express.Router();
 
 // middleware that is specific to this router
-router.use(logger.log)
+router.use(logger.log_route)
       .post('/install', routes_handler.install.POST)
       .get('/packages/:package/:file', routes_handler.packages.GET)
       .post('/search', routes_handler.search.POST)

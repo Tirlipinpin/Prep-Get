@@ -13,8 +13,10 @@ CREATE TABLE `packages` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 INSERT INTO `packages` (`id`, `name`) VALUES
-(1,	'nodejs'),
-(2,	'php7.0');
+(2,	'php7.0'),
+(3,	'nginx'),
+(4,	'mysql-5.6'),
+(5,	'php5');
 
 DROP TABLE IF EXISTS `packages_versions`;
 CREATE TABLE `packages_versions` (
@@ -25,9 +27,12 @@ CREATE TABLE `packages_versions` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 INSERT INTO `packages_versions` (`package_id`, `version`) VALUES
-(1,	'1.0.5'),
-(2,	'2.5'),
-(1,	'7.4.2'),
-(1,	'6.8');
+(2,	'7.0.11'),
+(3,	'1.8.0'),
+(3,	'1.10.2'),
+(4,	'5.6.35'),
+(4,	'5.6.25'),
+(5,	'5.6.30'),
+(5,	'5.6.21');
 
--- 2017-02-01 08:38:31
+-- 2017-02-01 21:07:54
