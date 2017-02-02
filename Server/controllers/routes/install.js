@@ -45,6 +45,7 @@ module.exports = {
                                     packages[key].url = '/packages/' + packages[key].name
                                         + '/' + packages[key].name + '_' + version + '.orig.tar.gz';
                                 }
+                                packages[key].version = version;
                                 rec(packages, key+1);
                             });
                     }
@@ -98,4 +99,3 @@ function CheckVersion(name, version, callback)
         });
     }
 }
-
