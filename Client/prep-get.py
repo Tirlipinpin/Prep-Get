@@ -6,36 +6,48 @@ import os
 import shutil
 from urllib import request
 
-ROOT = "http://172.16.1.248:4242"
+ROOT = "http://172.16.1.74:4242"
 
-def install():
+def install_func():
     URL = ROOT + "/install"
-    count = 1
+    check = 0
+    count = 0
     data = {"packages" :[]}
     while count < len(value):
-        data["packages"].append({"name": value[count]})
+        if '=' in value[count]:
+            tmp = value[count].split("=")
+            data["packages"].append({"name": tmp[0], "version": tmp[1]})
+        else:
+            data["packages"].append({"name": value[count]})            
         count += 1
     params = json.dumps(data).encode('utf8')
+    print(params)
     req = request.Request(URL, data=params, headers={'content-type': 'application/json'})
     response = request.urlopen(req).read().decode("utf8")
     files = json.loads(response)
     if not os.path.exists("tmp_pack") :
         os.makedirs("tmp_pack")
     for file in files :
-        print("Downloading " + file["name"])
-        request.urlretrieve(ROOT + file["url"], "tmp_pack/" + file["name"] + ".tar.gz")
-    if os.listdir("tmp_pack") == [] :
-        print("Error while downloading packages")
+        if "url" in file :
+            print("Downloading " + file["name"])
+            request.urlretrieve(ROOT + file["url"], "tmp_pack/" + file["name"] + ".tar.gz")
+        else :
+            print("Sorry, the package " + file["name"] + " doesn\'t exist")
+            check += 1
+    if check != 0 :
+        print("Error while downloading some packages")
     else :
-        print("Packages successfully downloaded")
-    
-def search():
+        print("Everything has been successfully downloaded")
+
+def search_func():
     URL = ROOT + "/search"
     count = 1
+    print(value)
     while count < len(value):
         print("Checking database for :", value[count])
         count += 1
     params = json.dumps(value).encode('utf8')
+    print(params)
     req = request.Request(URL, data=params, headers={'content-type': 'application/json'})
     response = request.urlopen(req).read().decode("utf8")
     files = json.loads(response)
@@ -45,20 +57,21 @@ def search():
 parser = argparse.ArgumentParser()
 subparser = parser.add_subparsers()
 install = subparser.add_parser('install', help='install a package')
-install.add_argument('-v')
+install.add_argument('package', nargs='+', help='package name')
+# install.add_argument('-v', nargs='+', help='package version')
 search = subparser.add_parser('search', help='check if package exists')
-# parser.add_argument('search', nargs='+', help='check if package exists')
-# args = parser.parse_args()
+search.add_argument('search', nargs='+', help='check if package exists')
+args = parser.parse_args()._get_kwargs()
 
 if sys.argv[1] == 'install' and sys.argv[2: ]:
-    for _, value in parser.parse_args()._get_kwargs():
+    for _, value in args:
         pass
-    install()
+    install_func()
 elif sys.argv[1] == 'search' and sys.argv[2: ]:
-    for _, value in parser.parse_args()._get_kwargs():
+    for _, value in args:
         pass
-    search()
+    search_func()
 elif sys.argv[1] != 'install' and sys.argv[1] != 'search':
     print("Bad entry, please consult the help")
 else :
-    print("No package(s) selected");
+    print("No package(s) selected")
