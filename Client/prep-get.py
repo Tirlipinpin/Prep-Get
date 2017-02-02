@@ -21,7 +21,6 @@ def install_func():
             data["packages"].append({"name": value[count]})            
         count += 1
     params = json.dumps(data).encode('utf8')
-    print(params)
     req = request.Request(URL, data=params, headers={'content-type': 'application/json'})
     response = request.urlopen(req).read().decode("utf8")
     files = json.loads(response)
@@ -42,12 +41,10 @@ def install_func():
 def search_func():
     URL = ROOT + "/search"
     count = 1
-    print(value)
     while count < len(value):
         print("Checking database for :", value[count])
         count += 1
     params = json.dumps(value).encode('utf8')
-    print(params)
     req = request.Request(URL, data=params, headers={'content-type': 'application/json'})
     response = request.urlopen(req).read().decode("utf8")
     files = json.loads(response)
@@ -58,7 +55,6 @@ parser = argparse.ArgumentParser()
 subparser = parser.add_subparsers()
 install = subparser.add_parser('install', help='install a package')
 install.add_argument('package', nargs='+', help='package name')
-# install.add_argument('-v', nargs='+', help='package version')
 search = subparser.add_parser('search', help='check if package exists')
 search.add_argument('search', nargs='+', help='check if package exists')
 args = parser.parse_args()._get_kwargs()
