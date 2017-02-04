@@ -27,3 +27,14 @@ Enter password: root
 > npm install && npm start
 > exit
 ```
+### How To install client
+```shell
+> su -c "apt-get install -y git python3"
+Password: ***********
+> git clone https://github.com/Steve-Nzr/Prep-Get.git
+Username for 'https://github.com': **********
+Password for 'https://**********@github.com': ***************
+> cd Prep-Get/Client
+> chmod +x prep-get.py
+> ./prep-get.py [install|search|upload] [packages...]
+```
