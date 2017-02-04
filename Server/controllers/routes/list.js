@@ -3,7 +3,7 @@
 */
 
 module.exports = {
-    POST: function (req, res)
+    GET: function (req, res)
     {
         connection.query('SELECT name FROM packages ORDER BY name ASC', function(err, rows, fields) {
             if (!err && rows[0] != undefined) {

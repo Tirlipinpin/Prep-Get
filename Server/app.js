@@ -12,7 +12,7 @@ router.use(logger.log_route)
       .get('/packages/:package/:file', routes_handler.packages.GET)
       .post('/search', routes_handler.search.POST)
       .post('/upload', routes_handler.upload.POST)
-      .post('/list', routes_handler.list.POST)
+      .get('/list', routes_handler.list.GET)
       .get('*', routes_handler.all.GET)
       .post('*', routes_handler.all.POST);
 
