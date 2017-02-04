@@ -21,27 +21,30 @@ auth=[1, 2, 3]
 count = 0
 verif = 0
 
-if sys.argv[1] == 'install' and sys.argv[2: ]:
-    for _, value in args:
-        pass
-    functions.install_func(value)
-elif sys.argv[1] == 'search' and sys.argv[2: ]:
-    for _, value in args:
-        pass
-    functions.search_func(value)
-elif sys.argv[1] == 'upload' and sys.argv[2: ]:
-    for _, value in args:
-        if value:
-            auth[count] = value[0]
-            count += 1
-        else :
-            verif += 1
-            break
-    if verif == 0 :
-        functions.upload_func(auth)
-    else:
-        print("Not enough arguments")
-elif sys.argv[1] != 'install' and sys.argv[1] != 'search' and sys.argv[1] != 'upload':
-    print("Bad entry, please consult the help")
+if len(sys.argv) > 1:
+    if sys.argv[1] == 'install' and sys.argv[2: ]:
+        for _, value in args:
+            pass
+        functions.install_func(value)
+    elif sys.argv[1] == 'search' and sys.argv[2: ]:
+        for _, value in args:
+            pass
+        functions.search_func(value)
+    elif sys.argv[1] == 'upload' and sys.argv[2: ]:
+        for _, value in args:
+            if value:
+                auth[count] = value[0]
+                count += 1
+            else :
+                verif += 1
+                break
+        if verif == 0 :
+            functions.upload_func(auth)
+        else:
+            print("Not enough arguments")
+    elif sys.argv[1] != 'install' and sys.argv[1] != 'search' and sys.argv[1] != 'upload':
+        print("Bad entry, please consult the help")
+    else :
+        print("No package(s) selected")
 else :
-    print("No package(s) selected")
+    print("No entry, please read the help")
