@@ -48,7 +48,7 @@ def install_func():
     for file in files :
         if "url" in file :
             print("Downloading " + file["name"])
-            request.urlretrieve(ROOT + file["url"], "tmp_pack/" + file["name"] + ".tar.gz")
+            request.urlretrieve(ROOT + file["url"], "tmp_pack/" + file["name"] + "_" + file["version"] + ".tar.gz")
         else :
             print("Sorry, the package " + file["name"] + " doesn\'t exist")
             check += 1
@@ -93,4 +93,4 @@ elif sys.argv[1] == 'upload' and sys.argv[2: ]:
 elif sys.argv[1] != 'install' and sys.argv[1] != 'search' and sys.argv[1] != 'upload':
     print("Bad entry, please consult the help")
 else :
-    print("No package(s) selected");
+    print("No package(s) selected")
