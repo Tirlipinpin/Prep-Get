@@ -9,21 +9,30 @@ from urllib import request
 
 ROOT = "http://172.16.1.74:4242"
 
-def upload_func(path) :
-    URL = ROOT + "/upload"
-    if os.path.isfile(path) :
-        if re.search('([^/]+)_([^_]+).tar.gz$', path):
-            param = re.findall('([^/]+)_([^_]+).tar.gz$', '/tmp_pack/mysql-5.6_5.6.35.tar.gz')
-            with open(path, "rb") as f:
-                byte = f.read()
-                req = request.Request(URL, data=byte, headers={'content-type': 'application/octet-stream'})
-                req.add_header('package_name', param[0][0])
-                req.add_header('package_version', param[0][1])
-                req.add_header('Content-Length', '%d'% len(byte))
-                response = request.urlopen(req).read().decode("utf8")
-                print("File uploaded correctly")
-        else:
-            print("Bad name for the file, expected [PACKAGE]_[VERSION].tar.gz")
+def upload_func(auth) :
+    URL = ROOT + "/token"
+    if os.path.isfile(auth[2]) :
+        data = {"user": auth[1], "pass": auth[0]}
+        data = json.dumps(data).encode('utf8')
+        req_auth = request.Request(URL, data=data, headers={"content-type": "application/json"})
+        res_auth = request.urlopen(req_auth).read().decode("utf8")
+        if res_auth == "false" :
+            print("Error: bad user or passwrd")
+        else :
+            URL = ROOT + "/upload"
+            if re.search('([^/]+)_([^_]+).tar.gz$', auth[2]):
+                param = re.findall('([^/]+)_([^_]+).tar.gz$', '/tmp_pack/mysql-5.6_5.6.35.tar.gz')
+                with open(auth[2], "rb") as f:
+                    byte = f.read()
+                    req = request.Request(URL, data=byte, headers={'content-type': 'application/octet-stream'})
+                    req.add_header('package_name', param[0][0])
+                    req.add_header('package_version', param[0][1])
+                    req.add_header('Content-Length', '%d'% len(byte))
+                    req.add_header('jwt', res_auth)
+                    response = request.urlopen(req).read().decode("utf8")
+                    print("File uploaded correctly")
+            else:
+                print("Bad name for the file, expected [PACKAGE]_[VERSION].tar.gz")
     else :
         print(path + ": No such file or directory")
 
@@ -78,7 +87,14 @@ search = subparser.add_parser('search', help='check if package exists')
 search.add_argument('search', nargs='+', help='check if package exists')
 upload = subparser.add_parser('upload', help='upload a package to the server')
 upload.add_argument('upload', nargs='+', help='upload a package to the server')
+user = subparser.add_parser('-u', help='choose a user to upload')
+upload.add_argument('-u', nargs=1, help='choose a user to upload')
+passwd = subparser.add_parser('-p', help='enter your user password')
+upload.add_argument('-p', nargs=1, help='enter your user password')
 args = parser.parse_args()._get_kwargs()
+
+auth=["a", "b", "c"]
+count = 0
 
 if sys.argv[1] == 'install' and sys.argv[2: ]:
     for _, value in args:
@@ -89,7 +105,10 @@ elif sys.argv[1] == 'search' and sys.argv[2: ]:
         pass
     search_func()
 elif sys.argv[1] == 'upload' and sys.argv[2: ]:
-    upload_func(sys.argv[2])
+    for _, value in args:
+        auth[count] = value[0]
+        count += 1
+    upload_func(auth)
 elif sys.argv[1] != 'install' and sys.argv[1] != 'search' and sys.argv[1] != 'upload':
     print("Bad entry, please consult the help")
 else :
