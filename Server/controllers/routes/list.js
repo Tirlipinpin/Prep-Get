@@ -2,6 +2,11 @@
 ** '/list' route
 */
 
+var mysql = require('mysql');
+var logger = require('../logger.js');
+var db_config = require("../../config/db.js");
+var connection = mysql.createConnection(db_config.db);
+
 module.exports = {
     GET: function (req, res)
     {
