@@ -41,7 +41,7 @@ module.exports = {
                                 if (is_exists)
                                 {
                                     packages[key].url = '/packages/' + packages[key].name
-                                        + '/' + packages[key].name + '_' + version + '.orig.tar.gz';
+                                        + '/' + packages[key].name + '_' + version + '.tar.gz';
                                 }
                                 packages[key].version = version;
                                 rec(packages, key+1);

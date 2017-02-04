@@ -42,7 +42,7 @@ module.exports = {
                                     return e;
                                 }
                             }
-                            var file = dir + req.headers.package_name + '_' + req.headers.package_version + '.orig.tar.gz';
+                            var file = dir + req.headers.package_name + '_' + req.headers.package_version + '.tar.gz';
                             if (!fs.existsSync(file)) {
                                 var writeStream = fs.createWriteStream(file);
                                 writeStream.write(buf);
@@ -55,6 +55,8 @@ module.exports = {
                                         connection.query(query, function(err, rows, fields) {
                                             if (err) {
                                                 logger.log(0, 'Can\'t insert package\'s version : ' + req.headers.package_name);
+                                            } else {
+                                                res.sendStatus(200);
                                             }
                                         });
                                     }
@@ -63,8 +65,9 @@ module.exports = {
                                         logger.log(0, 'Can\' find package : ' + req.headers.package_name);
                                     }
                                 });
+                            } else {
+                                res.sendStatus(403);
                             }
-                            res.sendStatus(200);
                         })
                     }
                 });
