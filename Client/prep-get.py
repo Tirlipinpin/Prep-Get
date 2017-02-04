@@ -17,11 +17,11 @@ def upload_func(auth) :
         req_auth = request.Request(URL, data=data, headers={"content-type": "application/json"})
         res_auth = request.urlopen(req_auth).read().decode("utf8")
         if res_auth == "false" :
-            print("Error: bad user or passwrd")
+            print("Error: bad user or password")
         else :
             URL = ROOT + "/upload"
             if re.search('([^/]+)_([^_]+).tar.gz$', auth[2]):
-                param = re.findall('([^/]+)_([^_]+).tar.gz$', '/tmp_pack/mysql-5.6_5.6.35.tar.gz')
+                param = re.findall('([^/]+)_([^_]+).tar.gz$', auth[2])
                 with open(auth[2], "rb") as f:
                     byte = f.read()
                     req = request.Request(URL, data=byte, headers={'content-type': 'application/octet-stream'})
@@ -34,7 +34,7 @@ def upload_func(auth) :
             else:
                 print("Bad name for the file, expected [PACKAGE]_[VERSION].tar.gz")
     else :
-        print(path + ": No such file or directory")
+        print(auth[2] + ": No such file or directory")
 
 def install_func():
     URL = ROOT + "/install"
@@ -93,8 +93,9 @@ passwd = subparser.add_parser('-p', help='enter your user password')
 upload.add_argument('-p', nargs=1, help='enter your user password')
 args = parser.parse_args()._get_kwargs()
 
-auth=["a", "b", "c"]
+auth=[1, 2, 3]
 count = 0
+verif = 0
 
 if sys.argv[1] == 'install' and sys.argv[2: ]:
     for _, value in args:
@@ -106,9 +107,16 @@ elif sys.argv[1] == 'search' and sys.argv[2: ]:
     search_func()
 elif sys.argv[1] == 'upload' and sys.argv[2: ]:
     for _, value in args:
-        auth[count] = value[0]
-        count += 1
-    upload_func(auth)
+        if value:
+            auth[count] = value[0]
+            count += 1
+        else :
+            verif += 1
+            break
+    if verif == 0 :
+        upload_func(auth)
+    else:
+        print("Not enough arguments")
 elif sys.argv[1] != 'install' and sys.argv[1] != 'search' and sys.argv[1] != 'upload':
     print("Bad entry, please consult the help")
 else :
