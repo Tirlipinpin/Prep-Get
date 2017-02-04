@@ -11,6 +11,7 @@ search = subparser.add_parser('search', help='check if package exists')
 search.add_argument('search', nargs='+', help='check if package exists')
 upload = subparser.add_parser('upload', help='upload a package to the server')
 upload.add_argument('upload', nargs='+', help='upload a package to the server')
+logic = subparser.add_parser('list', help='list all packages')
 user = subparser.add_parser('-u', help='choose a user to upload')
 upload.add_argument('-u', nargs=1, help='choose a user to upload')
 passwd = subparser.add_parser('-p', help='enter your user password')
@@ -30,6 +31,8 @@ if len(sys.argv) > 1:
         for _, value in args:
             pass
         functions.search_func(value)
+    elif sys.argv[1] == 'list':
+        functions.list_func()
     elif sys.argv[1] == 'upload' and sys.argv[2: ]:
         for _, value in args:
             if value:
@@ -42,7 +45,7 @@ if len(sys.argv) > 1:
             functions.upload_func(auth)
         else:
             print("Not enough arguments")
-    elif sys.argv[1] != 'install' and sys.argv[1] != 'search' and sys.argv[1] != 'upload':
+    elif sys.argv[1] != 'install' and sys.argv[1] != 'search' and sys.argv[1] != 'upload' and sys.argv[1] != 'list':
         print("Bad entry, please consult the help")
     else :
         print("No package(s) selected")

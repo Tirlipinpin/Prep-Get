@@ -75,3 +75,11 @@ def search_func(value):
     files = json.loads(response)
     for obj in files:
         print("Package found : ", obj['name'])
+
+def list_func():
+    URL = ROOT + "/list"
+    req = request.Request(URL)
+    response = request.urlopen(req).read().decode("utf8")
+    files = json.loads(response)
+    for obj in files:
+        print("Package found : ", obj['name'])
