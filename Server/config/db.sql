@@ -35,4 +35,16 @@ INSERT INTO `packages_versions` (`package_id`, `version`) VALUES
 (5,	'5.6.30'),
 (5,	'5.6.21');
 
--- 2017-02-01 21:07:54
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `login` varchar(16) NOT NULL,
+  `pass` varchar(64) NOT NULL,
+  `auth` int(1) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+INSERT INTO `users` (`id`, `login`, `pass`, `auth`) VALUES
+(1,	'gaudea_h',	'cf42713fbfa844ea8031a337c3b036c681c21bbdba1e9c0eca545527ff2609f0',	1);
+
+-- 2017-02-04 10:10:30
