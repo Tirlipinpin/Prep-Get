@@ -36,7 +36,7 @@ module.exports = {
                     }
                     jwt.encode(secret, payload, function (err, token) {
                         if (err) {
-                            res.end("false");
+                            res.end("true");
                         } else {
                             res.end(token);
                         }
