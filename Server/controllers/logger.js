@@ -15,14 +15,10 @@ module.exports = {
         var logs = `\n[${date}] : ${ip.slice(7)}\n`
             + `Method : ${req.method}\n`
             + `Path : ${req.url}\n`
-            + `Body : ${JSON.stringify(req.body)}\n`;
- 
-        /*console.log(`\n[${date}] : ${ip.slice(7)}`);
-        console.log("Method : " + req.method);
-        console.log("Path : " + req.url);
-        console.log("Body : " + JSON.stringify(req.body));*/
+            + `Body : ${JSON.stringify(req.body)}`;
+
         console.log(logs);
-        fs.appendFileSync(config.log_file, logs);
+        fs.appendFileSync(config.log_file, logs + '\n');
         next();
     },
     log: function (kind, str)

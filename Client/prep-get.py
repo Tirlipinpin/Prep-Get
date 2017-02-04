@@ -7,7 +7,7 @@ import shutil
 import re
 from urllib import request
 
-ROOT = "http://172.16.1.74:4242"
+ROOT = "http://192.168.56.201:4242"
 
 def upload_func(path) :
     URL = ROOT + "/upload"

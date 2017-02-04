@@ -19,10 +19,8 @@
 **
 */
 
-var mysql = require('mysql');
 var logger = require('../logger.js');
-var db_config = require("../../config/db.js");
-var connection = mysql.createConnection(db_config.db);
+var connection = require("../../config/db.js").connection;
 
 module.exports = {
     POST: function (req, res)
@@ -63,7 +61,7 @@ function CheckVersion(name, version, callback)
     if (version === undefined)
     {
         var query = 'SELECT version FROM packages_versions JOIN packages ON packages.id = packages_versions.package_id'
-        + ' WHERE packages.name = \'' + name + '\' ORDER BY version DESC LIMIT 1;';
+            + ' WHERE packages.name = \'' + name + '\' ORDER BY version DESC LIMIT 1;';
         connection.query(query, function(err, rows, fields) {
             if (!err && rows[0] != undefined)
             {
