@@ -13,8 +13,9 @@ router.use(logger.log_route)
       .post('/search', routes_handler.search.POST)
       .post('/upload', routes_handler.upload.POST)
       .get('/list', routes_handler.list.GET)
+      .post('/token', routes_handler.token.POST)
       .get('*', routes_handler.all.GET)
-      .post('*', routes_handler.all.POST);
+      .post('*', routes_handler.all.POST)
 
 app.use(bodyParser.json());
 app.use(router);
