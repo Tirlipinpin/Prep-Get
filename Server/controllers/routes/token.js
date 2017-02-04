@@ -11,11 +11,9 @@
 */
 
 var hash = require('sha256');
-var mysql = require('mysql');
 var logger = require('../logger.js');
-var db_config = require("../../config/db.js");
-var connection = mysql.createConnection(db_config.db);
 var jwt = require('json-web-token');
+var connection = require("../../config/db.js").connection;
 
 var secret = 'kd9/ghFGHt78678]76[]';
 var payload = {
@@ -38,6 +36,7 @@ module.exports = {
                         if (err) {
                             res.end("true");
                         } else {
+                            payload.user = req.body.user;
                             res.end(token);
                         }
                     });
