@@ -17,6 +17,7 @@ module.exports = {
     {
         if (req.headers.package_name !== undefined
             && req.headers.package_version !== undefined
+            && req.headers.author !== undefined
             && req.headers["jwt"] !== undefined
             && req.headers["content-type"] === "application/octet-stream")
         {
@@ -32,7 +33,7 @@ module.exports = {
                             } catch(e) {    
                                 try {
                                     fs.mkdirSync(dir);
-                                    var query = 'INSERT INTO packages (name) VALUES (\'' + req.headers.package_name + '\')';
+                                    var query = 'INSERT INTO packages (name, author) VALUES (\'' + req.headers.package_name + '\', \'' + req.headers.author + '\')';
                                     connection.query(query, function(err, rows, fields) {
                                         if (err) {
                                             logger.log(0, 'Can\'t insert package : ' + req.headers.package_name);
@@ -46,7 +47,7 @@ module.exports = {
                             if (!fs.existsSync(file)) {
                                 var writeStream = fs.createWriteStream(file);
                                 writeStream.write(buf);
-                                var query = 'SELECT id FROM packages WHERE name = \'' + req.headers.package_name + '\'';
+                                var query = 'SELECT id FROM packages WHERE name = \'' + req.headers.package_name + '\' AND author = \'' + req.headers.author + '\'';
                                 connection.query(query, function(err, fetch, fields) {
                                     if (!err && fetch[0] != undefined)
                                     {
@@ -55,6 +56,7 @@ module.exports = {
                                         connection.query(query, function(err, rows, fields) {
                                             if (err) {
                                                 logger.log(0, 'Can\'t insert package\'s version : ' + req.headers.package_name);
+                                                res.sendStatus(404);
                                             } else {
                                                 res.sendStatus(200);
                                             }
@@ -62,7 +64,8 @@ module.exports = {
                                     }
                                     else
                                     {
-                                        logger.log(0, 'Can\' find package : ' + req.headers.package_name);
+                                        logger.log(0, 'Operation not permitted : ' + req.headers.package_name);
+                                        res.sendStatus(403);
                                     }
                                 });
                             } else {

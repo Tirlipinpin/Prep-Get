@@ -9,60 +9,52 @@ DROP TABLE IF EXISTS `packages`;
 CREATE TABLE `packages` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(32) NOT NULL,
+  `author` varchar(16) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-INSERT INTO `packages` (`id`, `name`) VALUES
-(26,	'apcu'),
-(28,	'apcu-bc'),
-(29,	'libmemcached'),
-(30,	'mysql-5.5'),
-(31,	'mysql-5.6'),
-(32,	'nginx'),
-(33,	'pear-channels'),
-(34,	'percona-toolkit'),
-(51,	'php-geoip'),
-(52,	'php-igbinary'),
-(53,	'php-imagick'),
-(54,	'php-memcached'),
-(55,	'php-mongodb'),
-(56,	'php-msgpack'),
-(57,	'php-pear'),
-(58,	'php-redis'),
-(59,	'php-ssh2'),
-(35,	'php5'),
-(36,	'php5-apcu'),
-(37,	'php5-gearman'),
-(38,	'php5-geoip'),
-(39,	'php5-imagick'),
-(40,	'php5-memcache'),
-(41,	'php5-memcached'),
-(42,	'php5-mongo'),
-(43,	'php5-msgpack'),
-(44,	'php5-pecl-http'),
-(45,	'php5-propro'),
-(46,	'php5-pthreads'),
-(47,	'php5-raphf'),
-(48,	'php5-redis'),
-(49,	'php5-ssh2'),
-(50,	'php7.0'),
-(60,	'pinba-engine'),
-(61,	'pinba-engine-mysql'),
-(62,	'redis'),
-(63,	'ruby-passenger'),
-(64,	'xdebug'),
-(65,	'xhprof'),
-(66,	'zabbix');
-
-DROP TABLE IF EXISTS `packages_owners`;
-CREATE TABLE `packages_owners` (
-  `package_id` int(11) NOT NULL,
-  `user` varchar(16) NOT NULL,
-  KEY `package_id` (`package_id`),
-  CONSTRAINT `packages_owners_ibfk_1` FOREIGN KEY (`package_id`) REFERENCES `packages` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
+INSERT INTO `packages` (`id`, `name`, `author`) VALUES
+(26,	'apcu',	'gaudea_h'),
+(28,	'apcu-bc',	'gaudea_h'),
+(29,	'libmemcached',	'gaudea_h'),
+(30,	'mysql-5.5',	'gaudea_h'),
+(31,	'mysql-5.6',	'gaudea_h'),
+(32,	'nginx',	'gaudea_h'),
+(33,	'pear-channels',	'gaudea_h'),
+(34,	'percona-toolkit',	'gaudea_h'),
+(35,	'php5',	'gaudea_h'),
+(36,	'php5-apcu',	'gaudea_h'),
+(37,	'php5-gearman',	'gaudea_h'),
+(38,	'php5-geoip',	'gaudea_h'),
+(39,	'php5-imagick',	'gaudea_h'),
+(40,	'php5-memcache',	'gaudea_h'),
+(41,	'php5-memcached',	'gaudea_h'),
+(42,	'php5-mongo',	'gaudea_h'),
+(43,	'php5-msgpack',	'gaudea_h'),
+(44,	'php5-pecl-http',	'gaudea_h'),
+(45,	'php5-propro',	'gaudea_h'),
+(46,	'php5-pthreads',	'gaudea_h'),
+(47,	'php5-raphf',	'gaudea_h'),
+(48,	'php5-redis',	'gaudea_h'),
+(49,	'php5-ssh2',	'gaudea_h'),
+(50,	'php7.0',	'gaudea_h'),
+(51,	'php-geoip',	'gaudea_h'),
+(52,	'php-igbinary',	'gaudea_h'),
+(53,	'php-imagick',	'gaudea_h'),
+(54,	'php-memcached',	'gaudea_h'),
+(55,	'php-mongodb',	'gaudea_h'),
+(56,	'php-msgpack',	'gaudea_h'),
+(57,	'php-pear',	'gaudea_h'),
+(58,	'php-redis',	'gaudea_h'),
+(59,	'php-ssh2',	'gaudea_h'),
+(60,	'pinba-engine',	'gaudea_h'),
+(61,	'pinba-engine-mysql',	'gaudea_h'),
+(62,	'redis',	'gaudea_h'),
+(63,	'ruby-passenger',	'gaudea_h'),
+(64,	'xdebug',	'gaudea_h'),
+(65,	'xhprof',	'gaudea_h'),
+(66,	'zabbix',	'gaudea_h');
 
 DROP TABLE IF EXISTS `packages_versions`;
 CREATE TABLE `packages_versions` (
@@ -235,4 +227,4 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `login`, `pass`, `auth`) VALUES
 (1,	'gaudea_h',	'cf42713fbfa844ea8031a337c3b036c681c21bbdba1e9c0eca545527ff2609f0',	1);
 
--- 2017-02-05 08:17:06
+-- 2017-02-05 08:32:53
