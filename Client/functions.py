@@ -26,6 +26,7 @@ def upload_func(auth) :
                         req.add_header('package_name', param[0][0])
                         req.add_header('package_version', param[0][1])
                         req.add_header('Content-Length', '%d'% len(byte))
+                        req.add_header('author', auth[1]))
                         req.add_header('jwt', res_auth)
                         response = request.urlopen(req).read().decode("utf8")
                         print("File uploaded correctly")
