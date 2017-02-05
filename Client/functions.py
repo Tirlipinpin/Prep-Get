@@ -21,13 +21,16 @@ def upload_func(auth) :
                 param = re.findall('([^/]+)_([^_]+).tar.gz$', auth[2])
                 with open(auth[2], "rb") as f:
                     byte = f.read()
-                    req = request.Request(URL, data=byte, headers={'content-type': 'application/octet-stream'})
-                    req.add_header('package_name', param[0][0])
-                    req.add_header('package_version', param[0][1])
-                    req.add_header('Content-Length', '%d'% len(byte))
-                    req.add_header('jwt', res_auth)
-                    response = request.urlopen(req).read().decode("utf8")
-                    print("File uploaded correctly")
+                    try:
+                        req = request.Request(URL, data=byte, headers={'content-type': 'application/octet-stream'})
+                        req.add_header('package_name', param[0][0])
+                        req.add_header('package_version', param[0][1])
+                        req.add_header('Content-Length', '%d'% len(byte))
+                        req.add_header('jwt', res_auth)
+                        response = request.urlopen(req).read().decode("utf8")
+                        print("File uploaded correctly")
+                    except IOError:
+                        print("Error while uploading the file, access forbidden")
             else:
                 print("Bad name for the file, expected [PACKAGE]_[VERSION].tar.gz")
     else :
