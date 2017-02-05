@@ -46,22 +46,26 @@ def install_func(value):
             data["packages"].append({"name": value[count]})            
         count += 1
     params = json.dumps(data).encode('utf8')
-    req = request.Request(URL, data=params, headers={'content-type': 'application/json'})
-    response = request.urlopen(req).read().decode("utf8")
-    files = json.loads(response)
-    if not os.path.exists("tmp_pack") :
-        os.makedirs("tmp_pack")
-    for file in files :
-        if "url" in file :
-            print("Downloading " + file["name"])
-            request.urlretrieve(ROOT + file["url"], "tmp_pack/" + file["name"] + "_" + file["version"] + ".tar.gz")
+    try:
+        req = request.Request(URL, data=params, headers={'content-type': 'application/json'})
+        response = request.urlopen(req).read().decode("utf8")
+        files = json.loads(response)
+        if not os.path.exists("tmp_pack") :
+            os.makedirs("tmp_pack")
+        for file in files :
+            if "url" in file :
+                print("Downloading " + file["name"])
+                request.urlretrieve(ROOT + file["url"], "tmp_pack/" + file["name"] + "_" + file["version"] + ".tar.gz")
+            else :
+                print("Sorry, the package " + file["name"] + " doesn\'t exist")
+                check += 1
+        if check != 0 :
+            print("Error while downloading some packages")
         else :
-            print("Sorry, the package " + file["name"] + " doesn\'t exist")
-            check += 1
-    if check != 0 :
-        print("Error while downloading some packages")
-    else :
-        print("Everything has been successfully downloaded")
+            print("Everything has been successfully downloaded")
+    except IOError:
+        print("Error while connecting to server")
+
     
 def search_func(value):
     URL = ROOT + "/search"
@@ -70,16 +74,22 @@ def search_func(value):
         print("Checking database for :", value[count])
         count += 1
     params = json.dumps(value).encode('utf8')
-    req = request.Request(URL, data=params, headers={'content-type': 'application/json'})
-    response = request.urlopen(req).read().decode("utf8")
-    files = json.loads(response)
-    for obj in files:
-        print("Package found : ", obj['name'])
+    try:
+        req = request.Request(URL, data=params, headers={'content-type': 'application/json'})
+        response = request.urlopen(req).read().decode("utf8")
+        files = json.loads(response)
+        for obj in files:
+            print("Package found : ", obj['name'])
+    except IOError:
+        print("Error while connecting to server")
 
 def list_func():
     URL = ROOT + "/list"
     req = request.Request(URL)
-    response = request.urlopen(req).read().decode("utf8")
-    files = json.loads(response)
-    for obj in files:
-        print("Package found : ", obj['name'])
+    try:
+        response = request.urlopen(req).read().decode("utf8")
+        files = json.loads(response)
+        for obj in files:
+            print("Package found : ", obj['name'])
+    except IOError:
+        print("Error while connecting to server")
