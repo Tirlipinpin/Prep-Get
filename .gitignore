@@ -2,3 +2,4 @@
 /Server/log.txt
 __pycache__
 tmp_pack
+*.tar.gz

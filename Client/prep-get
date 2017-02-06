@@ -45,7 +45,7 @@ if len(sys.argv) > 1:
             functions.upload_func(auth)
         else:
             print("Not enough arguments")
-    elif sys.argv[1] != 'install' and sys.argv[1] != 'search' and sys.argv[1] != 'upload' and sys.argv[1] != 'list':
+    elif sys.argv[1] != 'install' and sys.argv[1] != 'search' and sys.argv[1] != 'upload' and sys.argv[1] != 'list' and sys.argv[1] != 'register':
         print("Bad entry, please consult the help")
     else :
         print("No package(s) selected")
