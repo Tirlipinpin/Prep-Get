@@ -1,10 +1,11 @@
 import json
+import functions as funcs
 from tkinter 		import *
 from tkinter.ttk	import *
 from urllib 		import request
 
 packages = []
-list_url = "http://127.0.0.1:4242/list"
+list_url = "http://172.16.1.74:4242/list"
 req = request.Request(list_url)
 try:
 	response = request.urlopen(req).read().decode("utf8")
@@ -18,8 +19,8 @@ class Window():
 		# The window
 		self.window = Tk()
 		self.window.title("Prep-Get")
-		self.window.minsize(width=750, height=500)
-		self.window.maxsize(width=750, height=500)
+		#self.window.minsize(width=750, height=500)
+		#self.window.maxsize(width=750, height=500)
 		
 		# Menu bar
 		menubar = Menu(self.window)
@@ -29,16 +30,21 @@ class Window():
 		self.window.config(menu=menubar)
 		
 		# Listbox packets
-		listbox = Listbox(self.window)
-		listbox.bind('<<ListboxSelect>>', self.list_on_select)
-		listbox.grid(row=0, column=0, columnspan=2, padx=3, sticky=N+S+E+W)
+		self.listbox = Listbox(self.window)
+		self.listbox.bind('<<ListboxSelect>>', self.list_on_select)
+		self.listbox.grid(row=0, column=0, columnspan=2, padx=3, sticky=N+S+E+W)
 		for obj in packages:
-			listbox.insert(END, obj["name"])
+			self.listbox.insert(END, obj["name"])
 
 		# Combobox version
-		self.cur_version	= StringVar()
-		self.list_version = Combobox(self.window, textvariable = self.cur_version, state = 'readonly')
+		self.cur_package = "";
+		self.cur_version = StringVar()
+		self.list_version = Combobox(self.window, textvariable=self.cur_version, state = 'readonly')
 		self.list_version.grid()
+
+		# Download button
+		dl_button = Button(self.window, text="Download", command=self.dl_button_click)
+		dl_button.grid()
 
 		# Main loop
 		self.window.mainloop()
@@ -59,8 +65,15 @@ class Window():
 			self.list_version['values'] = pack_version
 			if len(pack_version) > 0:
 				self.list_version.set(pack_version[0])
+				self.cur_version.set(pack_version[0])
+			self.cur_package = value
 	
-		
+	def dl_button_click(self):
+		if len(self.cur_package) > 0 and len(self.cur_version.get()) > 0:
+			package = self.cur_package + "=" + self.cur_version.get()
+			funcs.install_func([package])
+
+
 if __name__ == "__main__":
 	wnd = Window()
 	

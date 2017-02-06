@@ -4,7 +4,7 @@ import shutil
 import re
 from urllib import request
 
-ROOT = "http://172.16.1.208:4242"
+ROOT = "http://172.16.1.74:4242"
 
 def upload_func(auth) :
     URL = ROOT + "/token"
