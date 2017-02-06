@@ -38,7 +38,6 @@ def upload_func(auth) :
         print(auth[2] + ": No such file or directory")
 
 def install_func(value):
-    print(value)
     URL = ROOT + "/install"
     check = 0
     count = 0
@@ -107,6 +106,5 @@ def register_func(user):
         req = request.Request(URL, data=params, headers={'content-type': 'application/json'})
         req.add_header('Content-Length', '%d'% len(params))
         response = request.urlopen(req).read().decode("utf8")
-        print(response)
     except IOError:
         print("Couldn't create user")
