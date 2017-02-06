@@ -12,7 +12,7 @@ module.exports = {
     POST: function (req, res)
     {
 		if (req.body.name !== undefined && req.body.pass !== undefined) {
-			var query = 'INSERT INTO users (login, pass, auth) VALUES (\'' + req.body.name + '\', \'' + req.headers.pass + '\', 1)';
+			var query = 'INSERT INTO users (login, pass, auth) VALUES (\'' + req.body.name + '\', \'' + hash(secret + req.body.pass) + '\', 1)';
 			connection.query(query, function(err, rows, fields) {
 				if (!err) {
 					logger.log(1, 'New user registered : ' + req.body.name);
