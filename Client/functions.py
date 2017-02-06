@@ -4,7 +4,7 @@ import shutil
 import re
 from urllib import request
 
-ROOT = "http://172.16.1.74:4242"
+ROOT = "http://172.16.1.208:4242"
 
 def upload_func(auth) :
     URL = ROOT + "/token"
@@ -26,7 +26,7 @@ def upload_func(auth) :
                         req.add_header('package_name', param[0][0])
                         req.add_header('package_version', param[0][1])
                         req.add_header('Content-Length', '%d'% len(byte))
-                        req.add_header('author', auth[1]))
+                        req.add_header('author', auth[1])
                         req.add_header('jwt', res_auth)
                         response = request.urlopen(req).read().decode("utf8")
                         print("File uploaded correctly")

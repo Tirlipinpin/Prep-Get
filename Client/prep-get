@@ -50,4 +50,4 @@ if len(sys.argv) > 1:
     else :
         print("No package(s) selected")
 else :
-    print("No entry, please read the help")
+    print("Nothing to do.")
