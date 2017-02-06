@@ -29,7 +29,7 @@ Enter password: root
 ```
 ### How To install client
 ```shell
-> su -c "apt-get install -y git python3"
+> su -c "apt-get install -y git python3 python3-tk"
 Password: ***********
 > git clone https://github.com/Steve-Nzr/Prep-Get.git
 Username for 'https://github.com': **********
