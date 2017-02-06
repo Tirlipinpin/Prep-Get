@@ -8,6 +8,6 @@ exports.search = require("./routes/search.js");
 exports.upload = require("./routes/upload.js");
 exports.list = require("./routes/list.js");
 exports.token = require("./routes/token.js");
-exports.token = require("./routes/register.js");
+exports.register = require("./routes/register.js");
 exports.all = require("./routes/all.js");
 
