@@ -14,6 +14,7 @@ router.use(logger.log_route)
       .post('/upload', routes_handler.upload.POST)
       .get('/list', routes_handler.list.GET)
       .post('/token', routes_handler.token.POST)
+      .post('/register', routes_handler.register.POST)
       .get('*', routes_handler.all.GET)
       .post('*', routes_handler.all.POST)
 
