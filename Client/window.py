@@ -5,7 +5,7 @@ from tkinter.ttk	import *
 from urllib 		import request
 
 packages = []
-list_url = "http://172.16.1.74:4242/list"
+list_url = "http://138.68.174.191:80/list"
 req = request.Request(list_url)
 try:
 	response = request.urlopen(req).read().decode("utf8")
