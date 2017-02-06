@@ -9,7 +9,6 @@ else
         for file in $*; do
             echo "Extracting $file to packages folder"
             tar xvf $file -C ./packages
-            rm -rf $file
         done
         for app in ./packages/*; do
             if [ -d $app ]; then
