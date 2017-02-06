@@ -9,7 +9,7 @@ var connection = require("../../config/db.js").connection;
 var secret = 'kd9/ghFGHt78678]76[]';
 
 module.exports = {
-    GET: function (req, res)
+    POST: function (req, res)
     {
 		if (req.body.name !== undefined && req.body.pass !== undefined) {
 			var query = 'INSERT INTO users (login, pass, auth) VALUES (\'' + req.body.name + '\', \'' + req.headers.pass + '\', 1)';
