@@ -38,6 +38,7 @@ def upload_func(auth) :
         print(auth[2] + ": No such file or directory")
 
 def install_func(value):
+    print(value)
     URL = ROOT + "/install"
     check = 0
     count = 0

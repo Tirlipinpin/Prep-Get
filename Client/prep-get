@@ -18,8 +18,8 @@ upload.add_argument('-p', nargs=1, help='enter your user password')
 register = subparser.add_parser('register', help='create an account')
 register.add_argument('-u', nargs=1, help='choose a user to upload')
 register.add_argument('-p', nargs=1, help='enter your user password')
-# graphical = subparser.add_parser('-w', help='enable gui')
-parser.add_argument('-w', action='store_true', help='enable gui')
+graphical = subparser.add_parser('graphical', help='enable graphical interface')
+graphical.add_argument('graphical', action='store_true', help='enable graphical interface')
 args = parser.parse_args()._get_kwargs()
 
 auth=[1, 2, 3]
@@ -57,9 +57,9 @@ if len(sys.argv) > 1:
                 user[user_count] = value[0]
                 user_count += 1
         functions.register_func(user)
-    elif sys.argv[1] == '-w':
+    elif sys.argv[1] == 'graphical':
         window.Window(functions.ROOT)
-    elif sys.argv[1] != 'install' and sys.argv[1] != 'search' and sys.argv[1] != 'upload' and sys.argv[1] != 'list' and sys.argv[1] != 'register' and sys.argv[1] != '-w':
+    elif sys.argv[1] != 'install' and sys.argv[1] != 'search' and sys.argv[1] != 'upload' and sys.argv[1] != 'list' and sys.argv[1] != 'register' and sys.argv[1] != 'graphical':
         print("Bad entry, please consult the help")
     else :
         print("No package(s) selected")
