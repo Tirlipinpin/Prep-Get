@@ -2,6 +2,7 @@
 import argparse
 import sys
 import functions
+import window
 
 parser = argparse.ArgumentParser()
 subparser = parser.add_subparsers()
@@ -12,10 +13,13 @@ search.add_argument('search', nargs='+', help='check if package exists')
 upload = subparser.add_parser('upload', help='upload a package to the server')
 upload.add_argument('upload', nargs='+', help='upload a package to the server')
 logic = subparser.add_parser('list', help='list all packages')
-user = subparser.add_parser('-u', help='choose a user to upload')
 upload.add_argument('-u', nargs=1, help='choose a user to upload')
-passwd = subparser.add_parser('-p', help='enter your user password')
 upload.add_argument('-p', nargs=1, help='enter your user password')
+register = subparser.add_parser('register', help='create an account')
+register.add_argument('-u', nargs=1, help='choose a user to upload')
+register.add_argument('-p', nargs=1, help='enter your user password')
+# graphical = subparser.add_parser('-w', help='enable gui')
+parser.add_argument('-w', action='store_true', help='enable gui')
 args = parser.parse_args()._get_kwargs()
 
 auth=[1, 2, 3]
@@ -45,9 +49,19 @@ if len(sys.argv) > 1:
             functions.upload_func(auth)
         else:
             print("Not enough arguments")
-    elif sys.argv[1] != 'install' and sys.argv[1] != 'search' and sys.argv[1] != 'upload' and sys.argv[1] != 'list' and sys.argv[1] != 'register':
+    elif sys.argv[1] == 'register' and sys.argv[2: ]:
+        user = [1,2]
+        user_count = 0
+        for _, value in args:
+            if value and value != 'True':
+                user[user_count] = value[0]
+                user_count += 1
+        functions.register_func(user)
+    elif sys.argv[1] == '-w':
+        window.Window(functions.ROOT)
+    elif sys.argv[1] != 'install' and sys.argv[1] != 'search' and sys.argv[1] != 'upload' and sys.argv[1] != 'list' and sys.argv[1] != 'register' and sys.argv[1] != '-w':
         print("Bad entry, please consult the help")
     else :
         print("No package(s) selected")
 else :
-    print("Nothing to do.")
+    window.Window(functions.ROOT)

@@ -54,7 +54,8 @@ INSERT INTO `packages` (`id`, `name`, `author`) VALUES
 (63,	'ruby-passenger',	'gaudea_h'),
 (64,	'xdebug',	'gaudea_h'),
 (65,	'xhprof',	'gaudea_h'),
-(66,	'zabbix',	'gaudea_h');
+(66,	'zabbix',	'gaudea_h'),
+(67,	'test.6',	'gaudea_h');
 
 DROP TABLE IF EXISTS `packages_versions`;
 CREATE TABLE `packages_versions` (
@@ -213,7 +214,8 @@ INSERT INTO `packages_versions` (`package_id`, `version`) VALUES
 (64,	'2.5.0'),
 (65,	'0.9.4'),
 (66,	'2.2.10'),
-(66,	'2.2.11');
+(66,	'2.2.11'),
+(67,	'6.25');
 
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
@@ -221,10 +223,12 @@ CREATE TABLE `users` (
   `login` varchar(16) NOT NULL,
   `pass` varchar(64) NOT NULL,
   `auth` int(1) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `login` (`login`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 INSERT INTO `users` (`id`, `login`, `pass`, `auth`) VALUES
-(1,	'gaudea_h',	'cf42713fbfa844ea8031a337c3b036c681c21bbdba1e9c0eca545527ff2609f0',	1);
+(1,	'gaudea_h',	'cf42713fbfa844ea8031a337c3b036c681c21bbdba1e9c0eca545527ff2609f0',	1),
+(2,	'nicolas',	'fe86d78b3ff8094c586536cf689067332ab5673a654b068924361ee085328f98',	1);
 
--- 2017-02-05 08:32:53
+-- 2017-02-06 12:06:53

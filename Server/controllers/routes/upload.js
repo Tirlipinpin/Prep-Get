@@ -37,6 +37,8 @@ module.exports = {
                                     connection.query(query, function(err, rows, fields) {
                                         if (err) {
                                             logger.log(0, 'Can\'t insert package : ' + req.headers.package_name);
+                                        } else {
+                                            logger.log(1, 'New package inserted : ' + req.headers.package_name);
                                         }
                                     });
                                 } catch(e) {
@@ -58,6 +60,7 @@ module.exports = {
                                                 logger.log(0, 'Can\'t insert package\'s version : ' + req.headers.package_name);
                                                 res.sendStatus(404);
                                             } else {
+                                                logger.log(1, 'New version of ' + req.headers.package_name + ' inserted : ' + req.headers.package_version);
                                                 res.sendStatus(200);
                                             }
                                         });
