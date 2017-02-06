@@ -20,9 +20,9 @@ class Window():
 		
 		# Tab menu
 		group_install = LabelFrame(page, text="Installer un paquet")
-		group_install.pack(expand=1)
+		group_install.grid(column=0, row=0, padx=5, pady=5)
 		group_upload = LabelFrame(page, text="Envoyer un paquet")
-		group_upload.pack()
+		group_upload.grid(column=1, row=0, padx=5, pady=5)
 
 		# Menu bar
 		menubar = Menu(self.window)
@@ -34,19 +34,21 @@ class Window():
 		# Listbox packets
 		self.listbox = Listbox(group_install)
 		self.listbox.bind('<<ListboxSelect>>', self.list_on_select)
-		self.listbox.grid(row=0, column=0, columnspan=2, padx=3, sticky=N+S+E+W)
+		self.listbox.grid(row=0, column=0, columnspan=2, rowspan=10, padx=6, pady=6, sticky=N+S+E+W)
 		for obj in self.packages:
 			self.listbox.insert(END, obj["name"])
 
 		# Combobox version
 		self.cur_package = "";
+		label_v = Label(group_install, text="Version :")
 		self.cur_version = StringVar()
 		self.list_version = Combobox(group_install, textvariable=self.cur_version, state = 'readonly')
-		self.list_version.grid(row=1, column=3)
+		self.list_version.grid(row=3, column=3, columnspan=1, rowspan=1)
+		label_v.grid(row=2, column=3, columnspan=1, rowspan=1)
 
 		# Download button
 		dl_button = Button(group_install, text="Download", command=self.dl_button_click)
-		dl_button.grid(row=3, column=3)
+		dl_button.grid(row=6, column=3, columnspan=1, rowspan=1)
 		
 		
 		# Inputs upload
