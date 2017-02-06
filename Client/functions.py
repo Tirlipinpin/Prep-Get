@@ -4,7 +4,7 @@ import shutil
 import re
 from urllib import request
 
-ROOT = "http://172.16.1.208:4242"
+ROOT = "http://172.16.1.74:4242"
 
 def upload_func(auth) :
     URL = ROOT + "/token"
@@ -97,3 +97,15 @@ def list_func():
             print("Package found : ", obj['name'])
     except IOError:
         print("Error while connecting to server")
+
+def register_func(user):
+    URL = ROOT + "/register"
+    data = {"name": user[1], "pass": user[0]}
+    params = json.dumps(data).encode('utf8')
+    try:
+        req = request.Request(URL, data=params, headers={'content-type': 'application/json'})
+        req.add_header('Content-Length', '%d'% len(params))
+        response = request.urlopen(req).read().decode("utf8")
+        print(response)
+    except IOError:
+        print("Couldn't create user")
