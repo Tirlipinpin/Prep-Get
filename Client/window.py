@@ -15,14 +15,14 @@ class Window():
 		self.window.title("Prep-Get")
 		self.window.minsize(width=750, height=500)
 		self.window.maxsize(width=750, height=500)
+		page = Frame(self.window)
+		page.pack(expand=1, fill="both")
 		
 		# Tab menu
-		tab_menu = Notebook(self.window)
-		tab_page1 = Frame(tab_menu)
-		tab_page2 = Frame(tab_menu)
-		tab_menu.add(tab_page1, text="Install")
-		tab_menu.add(tab_page2, text="Upload")
-		tab_menu.pack(expand=1, fill="both")
+		group_install = LabelFrame(page, text="Installer un paquet")
+		group_install.pack(expand=1)
+		group_upload = LabelFrame(page, text="Envoyer un paquet")
+		group_upload.pack()
 
 		# Menu bar
 		menubar = Menu(self.window)
@@ -32,7 +32,7 @@ class Window():
 		self.window.config(menu=menubar)
 		
 		# Listbox packets
-		self.listbox = Listbox(tab_page1)
+		self.listbox = Listbox(group_install)
 		self.listbox.bind('<<ListboxSelect>>', self.list_on_select)
 		self.listbox.grid(row=0, column=0, columnspan=2, padx=3, sticky=N+S+E+W)
 		for obj in self.packages:
@@ -41,21 +41,21 @@ class Window():
 		# Combobox version
 		self.cur_package = "";
 		self.cur_version = StringVar()
-		self.list_version = Combobox(tab_page1, textvariable=self.cur_version, state = 'readonly')
+		self.list_version = Combobox(group_install, textvariable=self.cur_version, state = 'readonly')
 		self.list_version.grid(row=1, column=3)
 
-		## Download button
-		dl_button = Button(tab_page1, text="Download", command=self.dl_button_click)
+		# Download button
+		dl_button = Button(group_install, text="Download", command=self.dl_button_click)
 		dl_button.grid(row=3, column=3)
 		
 		
 		# Inputs upload
 		self.username = StringVar()
 		self.password = StringVar()
-		label_username = Label(tab_page2, text="Username :")
-		label_password = Label(tab_page2, text="Password :")
-		input_username = Entry(tab_page2, textvariable=self.username)
-		input_password = Entry(tab_page2, textvariable=self.password, show="*")
+		label_username = Label(group_upload, text="Username :")
+		label_password = Label(group_upload, text="Password :")
+		input_username = Entry(group_upload, textvariable=self.username)
+		input_password = Entry(group_upload, textvariable=self.password, show="*")
 		label_username.grid()
 		input_username.grid()
 		label_password.grid()
@@ -63,8 +63,8 @@ class Window():
 		
 		# File to upload
 		self.load_pack = ""
-		button_load_pack = Button(tab_page2, text="Charger un paquet", command=self.button_load_pack_click)
-		button_upload_pack = Button(tab_page2, text="Upload", command=self.button_upload_pack_click)
+		button_load_pack = Button(group_upload, text="Charger un paquet", command=self.button_load_pack_click)
+		button_upload_pack = Button(group_upload, text="Upload", command=self.button_upload_pack_click)
 		button_load_pack.grid()
 		button_upload_pack.grid()
 		
